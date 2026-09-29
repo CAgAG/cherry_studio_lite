@@ -20,12 +20,10 @@ import { DEFAULT_STREAM_OPTIONS_INCLUDE_USAGE, isMac, LATEST_PRIVACY_POLICY_VERS
 import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
 import { DEFAULT_SIDEBAR_ICONS } from '@renderer/config/sidebar'
 import type {
-  ApiServerConfig,
   AssistantsSortType,
   CodeStyleVarious,
   LanguageVarious,
   MathEngine,
-  MinAppRegionFilter,
   OpenAIServiceTier,
   PaintingProvider,
   S3Config,
@@ -38,7 +36,7 @@ import type {
   OpenAIReasoningSummary,
   OpenAIVerbosity
 } from '@renderer/types/aiCoreTypes'
-import { API_SERVER_DEFAULTS, UpgradeChannel } from '@shared/config/constant'
+import { UpgradeChannel } from '@shared/config/constant'
 import { v4 as uuid } from 'uuid'
 
 import type { RemoteSyncState } from './backup'
@@ -155,9 +153,6 @@ export interface SettingsState {
     disabled: SidebarIcon[]
   }
   narrowMode: boolean
-  // QuickAssistant
-  enableQuickAssistant: boolean
-  clickTrayToShowQuickAssistant: boolean
   multiModelMessageStyle: MultiModelMessageStyle
   readClipboardAtStartup: boolean
   notionDatabaseID: string | null
@@ -179,21 +174,11 @@ export interface SettingsState {
   joplinUrl: string | null
   joplinExportReasoning: boolean
   defaultObsidianVault: string | null
-  /** This state is actaully default assistant preset */
-  defaultAgent: string | null
   // 思源笔记配置
   siyuanApiUrl: string | null
   siyuanToken: string | null
   siyuanBoxId: string | null
   siyuanRootPath: string | null
-  // 订阅的助手地址
-  agentssubscribeUrl: string | null
-  // MinApps
-  maxKeepAliveMinapps: number
-  showOpenedMinappsInSidebar: boolean
-  minappsOpenLinkExternal: boolean
-  /** Mini app region filter: 'auto' (detect from IP), 'CN', or 'Global' */
-  minAppRegion: MinAppRegionFilter
   // 隐私设置
   privacyPolicyVersion?: string
   enableDataCollection: boolean
@@ -246,8 +231,6 @@ export interface SettingsState {
   enableDeveloperMode: boolean
   // UI
   navbarPosition: 'left' | 'top'
-  // API Server
-  apiServer: ApiServerConfig
   showMessageOutline: boolean
 }
 
@@ -347,8 +330,6 @@ export const initialState: SettingsState = {
     disabled: []
   },
   narrowMode: false,
-  enableQuickAssistant: false,
-  clickTrayToShowQuickAssistant: false,
   readClipboardAtStartup: true,
   multiModelMessageStyle: 'horizontal',
   notionDatabaseID: '',
@@ -370,17 +351,10 @@ export const initialState: SettingsState = {
   joplinUrl: '',
   joplinExportReasoning: false,
   defaultObsidianVault: null,
-  defaultAgent: null,
   siyuanApiUrl: null,
   siyuanToken: null,
   siyuanBoxId: null,
   siyuanRootPath: null,
-  agentssubscribeUrl: '',
-  // MinApps
-  maxKeepAliveMinapps: 3,
-  showOpenedMinappsInSidebar: true,
-  minappsOpenLinkExternal: false,
-  minAppRegion: 'auto',
   privacyPolicyVersion: LATEST_PRIVACY_POLICY_VERSION,
   enableDataCollection: true,
   enableSpellCheck: false,
@@ -444,13 +418,6 @@ export const initialState: SettingsState = {
   enableDeveloperMode: false,
   // UI
   navbarPosition: 'top',
-  // API Server
-  apiServer: {
-    enabled: false,
-    host: API_SERVER_DEFAULTS.HOST,
-    port: API_SERVER_DEFAULTS.PORT,
-    apiKey: `cs-sk-${uuid()}`
-  },
   showMessageOutline: false
 }
 
@@ -705,12 +672,6 @@ const settingsSlice = createSlice({
     setNarrowMode: (state, action: PayloadAction<boolean>) => {
       state.narrowMode = action.payload
     },
-    setClickTrayToShowQuickAssistant: (state, action: PayloadAction<boolean>) => {
-      state.clickTrayToShowQuickAssistant = action.payload
-    },
-    setEnableQuickAssistant: (state, action: PayloadAction<boolean>) => {
-      state.enableQuickAssistant = action.payload
-    },
     setReadClipboardAtStartup: (state, action: PayloadAction<boolean>) => {
       state.readClipboardAtStartup = action.payload
     },
@@ -777,9 +738,6 @@ const settingsSlice = createSlice({
     setDefaultObsidianVault: (state, action: PayloadAction<string>) => {
       state.defaultObsidianVault = action.payload
     },
-    setDefaultAgent: (state, action: PayloadAction<string>) => {
-      state.defaultAgent = action.payload
-    },
     setSiyuanApiUrl: (state, action: PayloadAction<string>) => {
       state.siyuanApiUrl = action.payload
     },
@@ -791,21 +749,6 @@ const settingsSlice = createSlice({
     },
     setSiyuanRootPath: (state, action: PayloadAction<string>) => {
       state.siyuanRootPath = action.payload
-    },
-    setAgentssubscribeUrl: (state, action: PayloadAction<string>) => {
-      state.agentssubscribeUrl = action.payload
-    },
-    setMaxKeepAliveMinapps: (state, action: PayloadAction<number>) => {
-      state.maxKeepAliveMinapps = action.payload
-    },
-    setShowOpenedMinappsInSidebar: (state, action: PayloadAction<boolean>) => {
-      state.showOpenedMinappsInSidebar = action.payload
-    },
-    setMinappsOpenLinkExternal: (state, action: PayloadAction<boolean>) => {
-      state.minappsOpenLinkExternal = action.payload
-    },
-    setMinAppRegion: (state, action: PayloadAction<MinAppRegionFilter>) => {
-      state.minAppRegion = action.payload
     },
     setEnableDataCollection: (state, action: PayloadAction<boolean>) => {
       state.enableDataCollection = action.payload
@@ -883,25 +826,6 @@ const settingsSlice = createSlice({
     setNavbarPosition: (state, action: PayloadAction<'left' | 'top'>) => {
       state.navbarPosition = action.payload
     },
-    // API Server actions
-    setApiServerEnabled: (state, action: PayloadAction<boolean>) => {
-      state.apiServer = {
-        ...state.apiServer,
-        enabled: action.payload
-      }
-    },
-    setApiServerPort: (state, action: PayloadAction<number>) => {
-      state.apiServer = {
-        ...state.apiServer,
-        port: action.payload
-      }
-    },
-    setApiServerApiKey: (state, action: PayloadAction<string>) => {
-      state.apiServer = {
-        ...state.apiServer,
-        apiKey: action.payload
-      }
-    },
     setShowMessageOutline: (state, action: PayloadAction<boolean>) => {
       state.showMessageOutline = action.payload
     }
@@ -978,8 +902,6 @@ export const {
   setTopicNamingPrompt,
   setSidebarIcons,
   setNarrowMode,
-  setClickTrayToShowQuickAssistant,
-  setEnableQuickAssistant,
   setReadClipboardAtStartup,
   setMultiModelMessageStyle,
   setNotionDatabaseID,
@@ -1000,16 +922,10 @@ export const {
   setJoplinExportReasoning,
   setMessageNavigation,
   setDefaultObsidianVault,
-  setDefaultAgent,
   setSiyuanApiUrl,
   setSiyuanToken,
   setSiyuanBoxId,
-  setAgentssubscribeUrl,
   setSiyuanRootPath,
-  setMaxKeepAliveMinapps,
-  setShowOpenedMinappsInSidebar,
-  setMinappsOpenLinkExternal,
-  setMinAppRegion,
   setEnableDataCollection,
   setPrivacyPolicyVersion,
   setEnableSpellCheck,
@@ -1035,11 +951,7 @@ export const {
   setS3Partial,
   setEnableDeveloperMode,
   setNavbarPosition,
-  setShowMessageOutline,
-  // API Server actions
-  setApiServerEnabled,
-  setApiServerPort,
-  setApiServerApiKey
+  setShowMessageOutline
 } = settingsSlice.actions
 
 export default settingsSlice.reducer

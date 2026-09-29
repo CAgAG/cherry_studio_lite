@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-const mockCacheRemove = vi.fn()
 const mockExecuteJavaScript = vi.fn().mockResolvedValue(undefined)
 const mockGetMainWindow = vi.fn(() => ({
   webContents: {
@@ -27,35 +26,22 @@ vi.mock('@logger', () => ({
   }
 }))
 
-vi.mock('../CacheService', () => ({
-  CacheService: {
-    remove: (...args: unknown[]) => mockCacheRemove(...args)
-  }
-}))
-
 vi.mock('../WindowService', () => ({
   windowService: {
     getMainWindow: () => mockGetMainWindow()
   }
 }))
 
-import { invalidateApiServerProvidersCacheForAction, reduxService } from '../ReduxService'
+import { reduxService } from '../ReduxService'
 
-describe('ReduxService provider cache invalidation', () => {
+describe('ReduxService', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  it('clears the API server provider cache for provider mutations', async () => {
+  it('dispatches actions to the renderer store', async () => {
     await reduxService.dispatch({ type: 'llm/updateProvider', payload: { id: 'openai', apiKey: 'new-key' } })
 
     expect(mockExecuteJavaScript).toHaveBeenCalled()
-    expect(mockCacheRemove).toHaveBeenCalledWith('api-server:providers')
-  })
-
-  it('does not clear the API server provider cache for unrelated actions', () => {
-    invalidateApiServerProvidersCacheForAction('llm/setDefaultModel')
-
-    expect(mockCacheRemove).not.toHaveBeenCalled()
   })
 })

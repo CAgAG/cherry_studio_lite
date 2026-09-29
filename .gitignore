@@ -34,6 +34,7 @@ Thumbs.db
 # Project
 node_modules
 dist
+dist-win
 out
 mcp_server
 stats.html

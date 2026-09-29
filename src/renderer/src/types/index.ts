@@ -17,9 +17,7 @@ import type { MCPConfigSample, MCPServerInstallSource, McpServerType } from './m
 import type { Message } from './newMessage'
 import type { BaseTool, MCPTool } from './tool'
 
-export * from './agent'
 export * from './apiModels'
-export * from './apiServer'
 export * from './knowledge'
 export * from './mcp'
 export * from './notification'
@@ -27,7 +25,6 @@ export * from './ocr'
 export * from './plugin'
 export * from './provider'
 export * from './serialize'
-export * from './skill'
 
 export type McpMode = 'disabled' | 'auto' | 'manual'
 

@@ -55,26 +55,12 @@ export enum IpcChannel {
   Notification_Send = 'notification:send',
   Notification_OnClick = 'notification:on-click',
 
-  Webview_SetOpenLinkExternal = 'webview:set-open-link-external',
-  Webview_SetSpellCheckEnabled = 'webview:set-spell-check-enabled',
-  Webview_SearchHotkey = 'webview:search-hotkey',
-  Webview_PrintToPDF = 'webview:print-to-pdf',
-  Webview_SaveAsHTML = 'webview:save-as-html',
-
   // Open
   Open_Path = 'open:path',
   Open_Website = 'open:website',
 
-  Minapp = 'minapp',
-
   Config_Set = 'config:set',
   Config_Get = 'config:get',
-
-  MiniWindow_Show = 'miniwindow:show',
-  MiniWindow_Hide = 'miniwindow:hide',
-  MiniWindow_Close = 'miniwindow:close',
-  MiniWindow_Toggle = 'miniwindow:toggle',
-  MiniWindow_SetPin = 'miniwindow:set-pin',
 
   // Mcp
   Mcp_AddServer = 'mcp:add-server',
@@ -101,33 +87,9 @@ export enum IpcChannel {
   // Python
   Python_Execute = 'python:execute',
 
-  // agent messages
-  AgentMessage_PersistExchange = 'agent-message:persist-exchange',
-  AgentMessage_GetHistory = 'agent-message:get-history',
-
   AgentToolPermission_Request = 'agent-tool-permission:request',
   AgentToolPermission_Response = 'agent-tool-permission:response',
   AgentToolPermission_Result = 'agent-tool-permission:result',
-
-  // Agent session stream (IM channel -> renderer real-time)
-  AgentSessionStream_Subscribe = 'agent-session-stream:subscribe',
-  AgentSessionStream_Unsubscribe = 'agent-session-stream:unsubscribe',
-  AgentSessionStream_Abort = 'agent-session-stream:abort',
-  AgentSessionStream_Chunk = 'agent-session-stream:chunk',
-  AgentSession_Changed = 'agent-session:changed',
-
-  // WeChat channel
-  WeChat_QrLogin = 'wechat:qr-login',
-  WeChat_HasCredentials = 'wechat:has-credentials',
-
-  // Feishu channel
-  Feishu_QrLogin = 'feishu:qr-login',
-
-  // Channel status & logs
-  Channel_StatusChange = 'channel:status-change',
-  Channel_Log = 'channel:log',
-  Channel_GetLogs = 'channel:get-logs',
-  Channel_GetStatuses = 'channel:get-statuses',
 
   //copilot
   Copilot_GetAuthMessage = 'copilot:get-auth-message',
@@ -302,9 +264,6 @@ export enum IpcChannel {
 
   FullscreenStatusChanged = 'fullscreen-status-changed',
 
-  HideMiniWindow = 'hide-mini-window',
-  ShowMiniWindow = 'show-mini-window',
-
   ReduxStoreReady = 'redux-store-ready',
 
   // Search Window
@@ -320,25 +279,6 @@ export enum IpcChannel {
 
   // Provider
   Provider_AddKey = 'provider:add-key',
-
-  //Selection Assistant
-  Selection_TextSelected = 'selection:text-selected',
-  Selection_ToolbarHide = 'selection:toolbar-hide',
-  Selection_ToolbarVisibilityChange = 'selection:toolbar-visibility-change',
-  Selection_ToolbarDetermineSize = 'selection:toolbar-determine-size',
-  Selection_WriteToClipboard = 'selection:write-to-clipboard',
-  Selection_SetEnabled = 'selection:set-enabled',
-  Selection_SetTriggerMode = 'selection:set-trigger-mode',
-  Selection_SetFilterMode = 'selection:set-filter-mode',
-  Selection_SetFilterList = 'selection:set-filter-list',
-  Selection_SetFollowToolbar = 'selection:set-follow-toolbar',
-  Selection_SetRemeberWinSize = 'selection:set-remeber-win-size',
-  Selection_ActionWindowClose = 'selection:action-window-close',
-  Selection_ActionWindowMinimize = 'selection:action-window-minimize',
-  Selection_ActionWindowPin = 'selection:action-window-pin',
-  Selection_ProcessAction = 'selection:process-action',
-  Selection_UpdateActionData = 'selection:update-action-data',
-  Selection_GetLinuxEnvInfo = 'selection:get-linux-env-info',
 
   // Memory
   Memory_Add = 'memory:add',
@@ -368,15 +308,6 @@ export enum IpcChannel {
   TRACE_CLEAN_LOCAL_DATA = 'trace:cleanLocalData',
   TRACE_ADD_STREAM_MESSAGE = 'trace:addStreamMessage',
 
-  // API Server
-  ApiServer_Start = 'api-server:start',
-  ApiServer_Stop = 'api-server:stop',
-  ApiServer_Restart = 'api-server:restart',
-  ApiServer_GetStatus = 'api-server:get-status',
-  ApiServer_Ready = 'api-server:ready',
-  // NOTE: This api is not be used.
-  ApiServer_GetConfig = 'api-server:get-config',
-
   // Anthropic OAuth
   Anthropic_StartOAuthFlow = 'anthropic:start-oauth-flow',
   Anthropic_CompleteOAuthWithCode = 'anthropic:complete-oauth-with-code',
@@ -387,13 +318,6 @@ export enum IpcChannel {
 
   // ExternalApps
   ExternalApps_DetectInstalled = 'external-apps:detect-installed',
-
-  // CodeTools
-  CodeTools_Run = 'code-tools:run',
-  CodeTools_GetAvailableTerminals = 'code-tools:get-available-terminals',
-  CodeTools_SetCustomTerminalPath = 'code-tools:set-custom-terminal-path',
-  CodeTools_GetCustomTerminalPath = 'code-tools:get-custom-terminal-path',
-  CodeTools_RemoveCustomTerminalPath = 'code-tools:remove-custom-terminal-path',
 
   // OCR
   OCR_ocr = 'ocr:ocr',
@@ -412,17 +336,6 @@ export enum IpcChannel {
   // CherryAI
   Cherryai_GetSignature = 'cherryai:get-signature',
 
-  // Global Skills
-  Skill_List = 'skill:list',
-  Skill_Install = 'skill:install',
-  Skill_Uninstall = 'skill:uninstall',
-  Skill_Toggle = 'skill:toggle',
-  Skill_InstallFromZip = 'skill:install-from-zip',
-  Skill_InstallFromDirectory = 'skill:install-from-directory',
-  Skill_ReadFile = 'skill:read-file',
-  Skill_ListFiles = 'skill:list-files',
-  Skill_ListLocal = 'skill:list-local',
-
   // Local Transfer
   LocalTransfer_ListServices = 'local-transfer:list',
   LocalTransfer_StartScan = 'local-transfer:start-scan',
@@ -433,21 +346,6 @@ export enum IpcChannel {
   LocalTransfer_ClientEvent = 'local-transfer:client-event',
   LocalTransfer_SendFile = 'local-transfer:send-file',
   LocalTransfer_CancelTransfer = 'local-transfer:cancel-transfer',
-
-  // OpenClaw
-  OpenClaw_CheckInstalled = 'openclaw:check-installed',
-  OpenClaw_Install = 'openclaw:install',
-  OpenClaw_Uninstall = 'openclaw:uninstall',
-  OpenClaw_InstallProgress = 'openclaw:install-progress',
-  OpenClaw_StartGateway = 'openclaw:start-gateway',
-  OpenClaw_StopGateway = 'openclaw:stop-gateway',
-  OpenClaw_GetStatus = 'openclaw:get-status',
-  OpenClaw_CheckHealth = 'openclaw:check-health',
-  OpenClaw_GetDashboardUrl = 'openclaw:get-dashboard-url',
-  OpenClaw_SyncConfig = 'openclaw:sync-config',
-  OpenClaw_GetChannels = 'openclaw:get-channels',
-  OpenClaw_CheckUpdate = 'openclaw:check-update',
-  OpenClaw_PerformUpdate = 'openclaw:perform-update',
 
   // Analytics
   Analytics_TrackTokenUsage = 'analytics:track-token-usage'

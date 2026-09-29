@@ -105,14 +105,6 @@ export class TrayService {
     configManager.subscribe(ConfigKeys.Language, () => {
       this.updateContextMenu()
     })
-
-    configManager.subscribe(ConfigKeys.EnableQuickAssistant, () => {
-      this.updateContextMenu()
-    })
-
-    configManager.subscribe(ConfigKeys.SelectionAssistantEnabled, () => {
-      this.updateContextMenu()
-    })
   }
 
   private quit() {

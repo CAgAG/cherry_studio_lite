@@ -535,8 +535,6 @@ class AssistantServer {
         trayOnClose: configManager.getTrayOnClose(),
         launchToTray: configManager.getLaunchToTray(),
         autoUpdate: configManager.getAutoUpdate(),
-        enableQuickAssistant: configManager.getEnableQuickAssistant(),
-        selectionAssistantEnabled: configManager.getSelectionAssistantEnabled(),
         enableDeveloperMode: configManager.getEnableDeveloperMode(),
         disableHardwareAcceleration: configManager.getDisableHardwareAcceleration(),
         useSystemTitleBar: configManager.getUseSystemTitleBar()

@@ -386,7 +386,7 @@ const fetchAndProcessAssistantResponseImpl = async (
             // OpenCode Go pins a conversation to one backend. The same topic must
             // reuse one opaque session id across every turn.
             ...(assistant.model?.provider === 'opencode-go'
-              ? { 'x-opencode-session': topicId, 'User-Agent': 'CherryStudio/1.10.0' }
+              ? { 'x-opencode-session': topicId, 'User-Agent': 'CherryStudio/1.10.1' }
               : {})
           }
         }

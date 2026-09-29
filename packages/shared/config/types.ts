@@ -1,21 +1,5 @@
 import type { ProcessingStatus } from '@types'
 
-// =============================================================================
-// Code Tools Types
-// =============================================================================
-
-export interface CodeToolsRunResult {
-  success: boolean
-  message: string
-  command: string
-}
-
-// =============================================================================
-// OpenClaw IPC Types
-// =============================================================================
-
-export type OperationResult = { success: true } | { success: false; message: string }
-
 export type LoaderReturn = {
   entriesAdded: number
   uniqueId: string

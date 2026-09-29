@@ -518,7 +518,7 @@ export async function fetchMessagesSummary({
     abortSignal: AbortSignal.timeout(SUMMARY_REQUEST_TIMEOUT_MS),
     maxRetries: 0,
     ...(model.provider === 'opencode-go' && topicId
-      ? { headers: { 'x-opencode-session': topicId, 'User-Agent': 'CherryStudio/1.10.0' } }
+      ? { headers: { 'x-opencode-session': topicId, 'User-Agent': 'CherryStudio/1.10.1' } }
       : {})
   }
 

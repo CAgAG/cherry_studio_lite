@@ -59,7 +59,6 @@ import { FileServiceManager } from './services/remotefile/FileServiceManager'
 import { searchService } from './services/SearchService'
 import { isSafeExternalUrl } from './services/security'
 import { registerShortcuts, unregisterAllShortcuts } from './services/ShortcutService'
-import { skillService } from './services/skills/SkillService'
 import {
   addEndMessage,
   addStreamMessage,
@@ -76,7 +75,6 @@ import {
 import storeSyncService from './services/StoreSyncService'
 import { themeService } from './services/ThemeService'
 import VertexAIService from './services/VertexAIService'
-import { setOpenLinkExternal } from './services/WebviewService'
 import { windowService } from './services/WindowService'
 import { calculateDirectorySize, getResourcePath } from './utils'
 import { decrypt, encrypt } from './utils/aes'
@@ -849,27 +847,6 @@ export async function registerIpc(mainWindow: BrowserWindow, app: Electron.App) 
     return await searchService.openUrlInSearchWindow(uid, url)
   })
 
-  // webview
-  ipcMain.handle(IpcChannel.Webview_SetOpenLinkExternal, (_, webviewId: number, isExternal: boolean) =>
-    setOpenLinkExternal(webviewId, isExternal)
-  )
-  ipcMain.handle(IpcChannel.Webview_SetSpellCheckEnabled, (_, webviewId: number, isEnable: boolean) => {
-    const webview = webContents.fromId(webviewId)
-    if (!webview) return
-    webview.session.setSpellCheckerEnabled(isEnable)
-  })
-
-  // Webview print and save handlers
-  ipcMain.handle(IpcChannel.Webview_PrintToPDF, async (_, webviewId: number) => {
-    const { printWebviewToPDF } = await import('./services/WebviewService')
-    return await printWebviewToPDF(webviewId)
-  })
-
-  ipcMain.handle(IpcChannel.Webview_SaveAsHTML, async (_, webviewId: number) => {
-    const { saveWebviewAsHTML } = await import('./services/WebviewService')
-    return await saveWebviewAsHTML(webviewId)
-  })
-
   // store sync
   storeSyncService.registerIpcHandler()
 
@@ -974,110 +951,6 @@ export async function registerIpc(mainWindow: BrowserWindow, app: Electron.App) 
 
   // CherryAI
   ipcMain.handle(IpcChannel.Cherryai_GetSignature, (_, params) => generateSignature(params))
-
-  // Global Skills
-  ipcMain.handle(IpcChannel.Skill_List, async (_, agentId?: string) => {
-    try {
-      const data = await skillService.list(agentId)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to list skills', { error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_Install, async (_, options) => {
-    try {
-      const data = await skillService.install(options)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to install skill', { options, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_Uninstall, async (_, skillId: string) => {
-    try {
-      await skillService.uninstall(skillId)
-      return { success: true, data: undefined }
-    } catch (error) {
-      logger.error('Failed to uninstall skill', { skillId, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_Toggle, async (_, options) => {
-    try {
-      if (
-        !options ||
-        typeof options.skillId !== 'string' ||
-        !options.skillId ||
-        typeof options.agentId !== 'string' ||
-        !options.agentId ||
-        typeof options.isEnabled !== 'boolean'
-      ) {
-        return { success: false, error: 'Invalid toggle options' }
-      }
-      const data = await skillService.toggle(options)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to toggle skill', { options, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_InstallFromZip, async (_, options) => {
-    try {
-      const data = await skillService.installFromZip(options)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to install skill from ZIP', { options, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_InstallFromDirectory, async (_, options) => {
-    try {
-      const data = await skillService.installFromDirectory(options)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to install skill from directory', { options, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_ReadFile, async (_, skillId: string, filename: string) => {
-    try {
-      const data = await skillService.readFile(skillId, filename)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to read skill file', { skillId, filename, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_ListFiles, async (_, skillId: string) => {
-    try {
-      const data = await skillService.listFiles(skillId)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to list skill files', { skillId, error })
-      return { success: false, error }
-    }
-  })
-
-  ipcMain.handle(IpcChannel.Skill_ListLocal, async (_, workdir: string) => {
-    try {
-      if (!workdir || typeof workdir !== 'string') {
-        return { success: false, error: 'Invalid workdir' }
-      }
-      const data = await skillService.listLocal(workdir)
-      return { success: true, data }
-    } catch (error) {
-      logger.error('Failed to list local plugins', { workdir, error })
-      return { success: false, error }
-    }
-  })
 
   ipcMain.handle(IpcChannel.LocalTransfer_ListServices, () => localTransferService.getState())
   ipcMain.handle(IpcChannel.LocalTransfer_StartScan, () => localTransferService.startDiscovery({ resetList: true }))

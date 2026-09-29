@@ -22,7 +22,6 @@ import {
   DEFAULT_TEMPERATURE,
   isMac
 } from '@renderer/config/constant'
-import { allMinApps } from '@renderer/config/minapps'
 import { isFunctionCallingModel, isNotSupportTextDeltaModel, qwenModel, SYSTEM_MODELS } from '@renderer/config/models'
 import { BUILTIN_OCR_PROVIDERS, BUILTIN_OCR_PROVIDERS_MAP, DEFAULT_OCR_PROVIDER } from '@renderer/config/ocr'
 import { TRANSLATE_PROMPT } from '@renderer/config/prompts'
@@ -91,16 +90,7 @@ function removeMiniAppFromState(state: any, id: string) {
   }
 }
 
-function addMiniApp(state: any, id: string) {
-  if (state.minapps) {
-    const app = allMinApps.find((app) => app.id === id)
-    if (app) {
-      if (!state.minapps.enabled.find((app) => app.id === id)) {
-        state.minapps.enabled.push(app)
-      }
-    }
-  }
-}
+function addMiniApp(_state: any, _id: string) {}
 
 // add provider to state
 function addProvider(state: any, id: string) {
@@ -1066,16 +1056,7 @@ const migrateConfig = {
   },
   '71': (state: any) => {
     try {
-      const appIds = ['dify', 'wpslingxi', 'lechat', 'abacus', 'lambdachat', 'baidu-ai-search']
-
       if (state.minapps) {
-        appIds.forEach((id) => {
-          const app = allMinApps.find((app) => app.id === id)
-          if (app) {
-            state.minapps.enabled.push(app)
-          }
-        })
-        // remove zhihu-zhiada
         state.minapps.enabled = state.minapps.enabled.filter((app) => app.id !== 'zhihu-zhiada')
         state.minapps.disabled = state.minapps.disabled.filter((app) => app.id !== 'zhihu-zhiada')
       }

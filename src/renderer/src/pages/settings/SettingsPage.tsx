@@ -14,12 +14,11 @@ import {
   Package,
   Search,
   Settings2,
-  Sparkles,
   Zap
 } from 'lucide-react'
 import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 
 import AboutSettings from './AboutSettings'
@@ -32,7 +31,6 @@ import MemorySettings from './MemorySettings'
 import { ProviderList } from './ProviderSettings'
 import QuickPhraseSettings from './QuickPhraseSettings'
 import ShortcutSettings from './ShortcutSettings'
-import SkillsSettings from './SkillsSettings'
 import WebSearchSettings from './WebSearchSettings'
 
 const SettingsPage: FC = () => {
@@ -86,12 +84,6 @@ const SettingsPage: FC = () => {
               {t('settings.mcp.title')}
             </MenuItem>
           </MenuItemLink>
-          <MenuItemLink to="/settings/skills">
-            <MenuItem className={isRoute('/settings/skills')}>
-              <Sparkles size={18} />
-              {t('settings.skills.title')}
-            </MenuItem>
-          </MenuItemLink>
           <MenuItemLink to="/settings/websearch">
             <MenuItem className={isRoute('/settings/websearch')}>
               <Search size={18} />
@@ -135,19 +127,13 @@ const SettingsPage: FC = () => {
             <Route path="provider" element={<ProviderList />} />
             <Route path="model" element={<ModelSettings />} />
             <Route path="websearch/*" element={<WebSearchSettings />} />
-            <Route path="api-server" element={<Navigate to="/settings/provider" replace />} />
-            <Route path="channels" element={<Navigate to="/settings/provider" replace />} />
-            <Route path="scheduled-tasks" element={<Navigate to="/settings/provider" replace />} />
             <Route path="docprocess" element={<DocProcessSettings />} />
             <Route path="quickphrase" element={<QuickPhraseSettings />} />
             <Route path="mcp/*" element={<MCPSettings />} />
-            <Route path="skills" element={<SkillsSettings />} />
             <Route path="memory" element={<MemorySettings />} />
             <Route path="general/*" element={<GeneralSettings />} />
             <Route path="display" element={<DisplaySettings />} />
             <Route path="shortcut" element={<ShortcutSettings />} />
-            <Route path="quickAssistant" element={<Navigate to="/settings/provider" replace />} />
-            <Route path="selectionAssistant" element={<Navigate to="/settings/provider" replace />} />
             <Route path="data" element={<DataSettings />} />
             <Route path="about" element={<AboutSettings />} />
           </Routes>

@@ -8,9 +8,9 @@ Cherry Studio Lite is a modified version of Cherry Studio.
 - License: GNU Affero General Public License v3.0 (AGPL-3.0). The license text in `LICENSE` is unchanged.
 - Modification date: 2026-09-29
 - This fork: https://github.com/CAgAG/cherry_studio_lite
-- Version: 1.10.0
+- Version: 1.10.1
 
-Changes in this fork: removed OpenClaw, the assistant store, agents, code tools, mini apps, scheduled tasks, the API server, channels, the selection assistant, and the floating assistant. Added the OpenCode Go provider.
+Changes in this fork: removed OpenClaw, the assistant store, agents, code tools, mini apps, scheduled tasks, the API server, channels, the selection assistant, the floating assistant, and skills. Added the OpenCode Go provider.
 
 本仓库是 Cherry Studio 的修改版。
 
@@ -20,6 +20,6 @@ Changes in this fork: removed OpenClaw, the assistant store, agents, code tools,
 - 许可证：GNU Affero General Public License v3.0（AGPL-3.0）。`LICENSE` 全文未改。
 - 修改日期：2026-09-29
 - 本仓库：https://github.com/CAgAG/cherry_studio_lite
-- 版本：1.10.0
+- 版本：1.10.1
 
-本分支删除了 OpenClaw、助手库、智能体、代码工具、小程序、定时任务、API 服务器、频道、划词助手和悬浮助手，并接入了 OpenCode Go。
+本分支删除了 OpenClaw、助手库、智能体、代码工具、小程序、定时任务、API 服务器、频道、划词助手、悬浮助手和技能，并接入了 OpenCode Go。
