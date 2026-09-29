@@ -1,3 +1,5 @@
+简体中文 | [English](./docs/en/README.md)
+
 # Cherry Studio Lite
 
 本仓库是 [Cherry Studio](https://github.com/CherryHQ/cherry-studio) `v1.9.13` 的修改版，版本 1.10.0。许可证：[GNU AGPL-3.0](LICENSE)。版权归 CherryHQ 及其贡献者。详见 [NOTICE.md](NOTICE.md)。
