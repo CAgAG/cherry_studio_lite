@@ -113,12 +113,6 @@ export class AppMenuService {
             click: () => {
               void shell.openExternal('https://github.com/CherryHQ/cherry-studio/issues/new/choose')
             }
-          },
-          {
-            label: appMenu.releases,
-            click: () => {
-              void shell.openExternal('https://github.com/CherryHQ/cherry-studio/releases')
-            }
           }
         ]
       }

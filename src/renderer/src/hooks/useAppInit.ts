@@ -9,13 +9,12 @@ import KnowledgeQueue from '@renderer/queue/KnowledgeQueue'
 import MemoryService from '@renderer/services/MemoryService'
 import { handleSaveData, useAppDispatch, useAppSelector } from '@renderer/store'
 import { selectMemoryConfig } from '@renderer/store/memory'
-import { setAvatar, setFilesPath, setResourcesPath, setUpdateState } from '@renderer/store/runtime'
+import { setAvatar, setFilesPath, setResourcesPath } from '@renderer/store/runtime'
 import {
   type ToolPermissionRequestPayload,
   type ToolPermissionResultPayload,
   toolPermissionsActions
 } from '@renderer/store/toolPermissions'
-import { delay, runAsyncFunction } from '@renderer/utils'
 import { checkDataLimit } from '@renderer/utils'
 import { sendToolApprovalNotification } from '@renderer/utils/userConfirmation'
 import { defaultLanguage } from '@shared/config/constant'
@@ -40,7 +39,6 @@ export function useAppInit() {
     proxyBypassRules,
     language,
     windowStyle,
-    autoCheckUpdate,
     proxyMode,
     customCss,
     enableDataCollection,
@@ -91,34 +89,6 @@ export function useAppInit() {
   useEffect(() => {
     avatar?.value && dispatch(setAvatar(avatar.value))
   }, [avatar, dispatch])
-
-  useEffect(() => {
-    const checkForUpdates = async () => {
-      const { isPackaged } = await window.api.getAppInfo()
-
-      if (!isPackaged || !autoCheckUpdate) {
-        return
-      }
-
-      const { updateInfo } = await window.api.checkForUpdate()
-      dispatch(setUpdateState({ info: updateInfo }))
-    }
-
-    // Initial check with delay
-    void runAsyncFunction(async () => {
-      const { isPackaged } = await window.api.getAppInfo()
-      if (isPackaged && autoCheckUpdate) {
-        await delay(2)
-        await checkForUpdates()
-      }
-    })
-
-    // Set up 4-hour interval check
-    const FOUR_HOURS = 4 * 60 * 60 * 1000
-    const intervalId = setInterval(checkForUpdates, FOUR_HOURS)
-
-    return () => clearInterval(intervalId)
-  }, [dispatch, autoCheckUpdate])
 
   useEffect(() => {
     if (proxyMode === 'system') {

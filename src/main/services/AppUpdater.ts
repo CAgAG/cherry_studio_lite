@@ -11,7 +11,6 @@ import type { AppUpdater as _AppUpdater, Logger, NsisUpdater, UpdateCheckResult 
 import { autoUpdater } from 'electron-updater'
 import path from 'path'
 
-import { analyticsService } from './AnalyticsService'
 import { configManager } from './ConfigManager'
 import { windowService } from './WindowService'
 
@@ -48,7 +47,7 @@ export default class AppUpdater {
     // Packaged builds use app-update.yml generated from electron-builder.yml;
     // development uses the repository's dev-app-update.yml.
     autoUpdater.forceDevUpdateConfig = !app.isPackaged
-    autoUpdater.autoDownload = configManager.getAutoUpdate()
+    autoUpdater.autoDownload = false
     // Never auto-install on quit - user must explicitly click "Install Now"
     // Auto-install on quit can cause issues: unexpected updates on restart,
     // corruption if system shuts down during install, or app uninstall on force shutdown
@@ -136,40 +135,9 @@ export default class AppUpdater {
   }
 
   public async checkForUpdates() {
-    void analyticsService.trackAppUpdate()
-
-    if (isWin && 'PORTABLE_EXECUTABLE_DIR' in process.env) {
-      return {
-        currentVersion: app.getVersion(),
-        updateInfo: null
-      }
-    }
-
-    try {
-      await this._configureUpdaterForCheck()
-
-      this.updateCheckResult = await this.autoUpdater.checkForUpdates()
-      logger.info(
-        `update check result: ${this.updateCheckResult?.isUpdateAvailable}, channel: ${this.autoUpdater.channel}, currentVersion: ${this.autoUpdater.currentVersion}`
-      )
-
-      if (this.updateCheckResult?.isUpdateAvailable && !this.autoUpdater.autoDownload) {
-        // 如果 autoDownload 为 false，则需要再调用下面的函数触发下
-        // do not use await, because it will block the return of this function
-        logger.info('downloadUpdate manual by check for updates', this.cancellationToken)
-        void this.autoUpdater.downloadUpdate(this.cancellationToken)
-      }
-
-      return {
-        currentVersion: this.autoUpdater.currentVersion,
-        updateInfo: this.updateCheckResult?.isUpdateAvailable ? this.updateCheckResult?.updateInfo : null
-      }
-    } catch (error) {
-      logger.error('Failed to check for update:', error as Error)
-      return {
-        currentVersion: app.getVersion(),
-        updateInfo: null
-      }
+    return {
+      currentVersion: app.getVersion(),
+      updateInfo: null
     }
   }
 

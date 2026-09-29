@@ -168,19 +168,11 @@ describe('AppUpdater', () => {
       expect(autoUpdater.channel).toBe(UpgradeChannel.BETA)
     })
 
-    it('applies the channel and request headers before checking for updates', async () => {
-      vi.mocked(autoUpdater.checkForUpdates).mockImplementation(async () => {
-        expect(autoUpdater.channel).toBe(UpgradeChannel.LATEST)
-        expect(autoUpdater.requestHeaders).toMatchObject({
-          'App-Version': 'v1.0.0',
-          'X-Region': 'global'
-        })
-        return null
-      })
+    it('does not contact the update server', async () => {
+      const result = await appUpdater.checkForUpdates()
 
-      await appUpdater.checkForUpdates()
-
-      expect(autoUpdater.checkForUpdates).toHaveBeenCalledOnce()
+      expect(autoUpdater.checkForUpdates).not.toHaveBeenCalled()
+      expect(result.updateInfo).toBeNull()
     })
   })
 

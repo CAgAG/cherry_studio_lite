@@ -43,9 +43,9 @@ const DIAGNOSE_TOOL: Tool = {
     properties: {
       action: {
         type: 'string',
-        enum: ['info', 'providers', 'health', 'logs', 'errors', 'mcp_status', 'read_source', 'config', 'check_update'],
+        enum: ['info', 'providers', 'health', 'logs', 'errors', 'mcp_status', 'read_source', 'config'],
         description:
-          'info: app version/paths/system. providers: list configured providers. health: test provider connectivity (cached 30s). logs: read recent log entries. errors: extract only ERROR/WARN entries from logs. mcp_status: check MCP server states. read_source: read a source file (read-only). config: read user settings (theme, language, proxy, default model, etc). check_update: compare current version with latest GitHub release.'
+          'info: app version/paths/system. providers: list configured providers. health: test provider connectivity (cached 30s). logs: read recent log entries. errors: extract only ERROR/WARN entries from logs. mcp_status: check MCP server states. read_source: read a source file (read-only). config: read user settings (theme, language, proxy, default model, etc).'
       },
       provider_id: {
         type: 'string',
@@ -170,8 +170,6 @@ class AssistantServer {
         return this.readSource(args.file_path as string | undefined, args.lines as number | undefined)
       case 'config':
         return await this.diagnoseConfig()
-      case 'check_update':
-        return await this.checkUpdate()
       default:
         throw new McpError(ErrorCode.InvalidParams, `Unknown diagnose action: ${action}`)
     }
@@ -561,72 +559,6 @@ class AssistantServer {
           }
         ],
         isError: true
-      }
-    }
-  }
-
-  private async checkUpdate() {
-    try {
-      const currentVersion = app.getVersion()
-      const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 5000)
-
-      const response = await fetch('https://api.github.com/repos/CherryHQ/cherry-studio/releases/latest', {
-        method: 'GET',
-        headers: { Accept: 'application/vnd.github.v3+json', 'User-Agent': 'CherryStudio' },
-        signal: controller.signal
-      })
-      clearTimeout(timeout)
-
-      if (!response.ok) {
-        return {
-          content: [
-            {
-              type: 'text' as const,
-              text: JSON.stringify({ currentVersion, error: `GitHub API returned ${response.status}` }, null, 2)
-            }
-          ]
-        }
-      }
-
-      const data = (await response.json()) as { tag_name: string; name: string; html_url: string; published_at: string }
-      const latestVersion = data.tag_name.replace(/^v/, '')
-
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(
-              {
-                currentVersion,
-                latestVersion,
-                isUpToDate: currentVersion === latestVersion,
-                releaseName: data.name,
-                releaseUrl: data.html_url,
-                publishedAt: data.published_at
-              },
-              null,
-              2
-            )
-          }
-        ]
-      }
-    } catch (error) {
-      return {
-        content: [
-          {
-            type: 'text' as const,
-            text: JSON.stringify(
-              {
-                currentVersion: app.getVersion(),
-                error: error instanceof Error ? error.message : String(error),
-                hint: 'GitHub may be unreachable. Check network connectivity.'
-              },
-              null,
-              2
-            )
-          }
-        ]
       }
     }
   }
