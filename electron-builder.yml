@@ -1,0 +1,186 @@
+appId: com.kangfenmao.CherryStudio
+productName: Cherry Studio
+electronLanguages:
+  - zh-CN
+  - zh-TW
+  - en-US
+  - ja # macOS/linux/win
+  - ru # macOS/linux/win
+  - zh_CN # for macOS
+  - zh_TW # for macOS
+  - en # for macOS
+  - de
+directories:
+  buildResources: build
+
+protocols:
+  - name: Cherry Studio
+    schemes:
+      - cherrystudio
+files:
+  - "**/*"
+  - "!**/{.vscode,.yarn,.yarn-lock,.github,.cursorrules,.prettierrc}"
+  - "!electron.vite.config.{js,ts,mjs,cjs}}"
+  - "!.*"
+  - "!components.json"
+  - "!**/{.eslintignore,.eslintrc.js,.eslintrc.json,.eslintcache,root.eslint.config.js,eslint.config.js,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,eslint.config.mjs,dev-app-update.yml,CHANGELOG.md,README.md,biome.jsonc}"
+  - "!**/{.env,.env.*,.npmrc,pnpm-lock.yaml}"
+  - "!**/{tsconfig.json,tsconfig.tsbuildinfo,tsconfig.node.json,tsconfig.web.json}"
+  - "!**/{.editorconfig,.jekyll-metadata}"
+  - "!src"
+  - "!config"
+  - "!patches"
+  - "!app-upgrade-config.json"
+  - "!**/node_modules/**/*.cpp"
+  - "!**/node_modules/node-addon-api/**"
+  - "!**/node_modules/prebuild-install/**"
+  - "!scripts"
+  - "!local"
+  - "!docs"
+  - "!packages"
+  - "!.swc"
+  - "!.bin"
+  - "!._*"
+  - "!*.log"
+  - "!stats.html"
+  - "!*.md"
+  - "!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp,csproj,sln,xproj}"
+  - "!**/*.{map,ts,tsx,jsx,less,scss,sass,css.d.ts,d.cts,d.mts,md,markdown,yaml,yml}"
+  - "!**/{test,tests,__tests__,powered-test,coverage}/**"
+  - "!**/{example,examples}/**"
+  - "!**/*.{spec,test}.{js,jsx,ts,tsx}"
+  - "!**/*.min.*.map"
+  - "!**/*.d.ts"
+  - "!**/dist/es6/**"
+  - "!**/dist/demo/**"
+  - "!**/amd/**"
+  - "!**/{.DS_Store,Thumbs.db,thumbs.db,__pycache__}"
+  - "!**/{LICENSE,license,LICENSE.*,*.LICENSE.txt,NOTICE.txt,README.md,readme.md,CHANGELOG.md}"
+  - "!node_modules/rollup-plugin-visualizer"
+  - "!node_modules/js-tiktoken"
+  - "!node_modules/@tavily/core/node_modules/js-tiktoken"
+  - "!node_modules/pdf-parse/lib/pdf.js/{v1.9.426,v1.10.88,v2.0.550}"
+  - "!node_modules/mammoth/{mammoth.browser.js,mammoth.browser.min.js}"
+  - "!node_modules/selection-hook/prebuilds/**/*" # we rebuild .node, don't use prebuilds
+  - "!node_modules/selection-hook/node_modules" # we don't need what in the node_modules dir
+  - "!node_modules/selection-hook/src" # we don't need source files
+  - "!node_modules/tesseract.js-core/{tesseract-core.js,tesseract-core.wasm,tesseract-core.wasm.js}" # we don't need source files
+  - "!node_modules/tesseract.js-core/{tesseract-core-lstm.js,tesseract-core-lstm.wasm,tesseract-core-lstm.wasm.js}" # we don't need source files
+  - "!node_modules/tesseract.js-core/{tesseract-core-simd-lstm.js,tesseract-core-simd-lstm.wasm,tesseract-core-simd-lstm.wasm.js}" # we don't need source files
+  - "!**/*.{h,iobj,ipdb,tlog,recipe,vcxproj,vcxproj.filters,Makefile,*.Makefile}" # filter .node build files
+  - "resources/**/*" # include all files in resources, and unpack them from asar for runtime access
+asarUnpack:
+  - out/proxy/**
+  - resources/**
+  - "**/*.{metal,exp,lib}"
+  - "node_modules/@img/sharp-*/**"
+  - "node_modules/@anthropic-ai/claude-agent-sdk-*/**"
+  - "node_modules/@cherrystudio/ripgrep/vendor/ripgrep/**"
+
+win:
+  executableName: Cherry Studio
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  target:
+    - target: nsis
+    - target: portable
+  signtoolOptions:
+    sign: scripts/win-sign.js
+  verifyUpdateCodeSignature: false
+nsis:
+  artifactName: ${productName}-${version}-${arch}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  allowToChangeInstallationDirectory: true
+  oneClick: false
+  include: build/nsis-installer.nsh
+  buildUniversalInstaller: false
+  differentialPackage: false
+portable:
+  artifactName: ${productName}-${version}-${arch}-portable.${ext}
+  buildUniversalInstaller: false
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  notarize: false
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  extendInfo:
+    - NSCameraUsageDescription: Application requests access to the device's camera.
+    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  target:
+    - target: dmg
+    - target: zip
+dmg:
+  writeUpdateInfo: false
+linux:
+  artifactName: ${productName}-${version}-${arch}.${ext}
+  executableName: CherryStudio
+  target:
+    - target: AppImage
+    - target: deb
+    - target: rpm
+  maintainer: electronjs.org
+  category: Utility
+  desktop:
+    entry:
+      Name: Cherry Studio
+      StartupWMClass: CherryStudio
+  mimeTypes:
+    - x-scheme-handler/cherrystudio
+rpm:
+  # Workaround for electron build issue on rpm package:
+  # https://github.com/electron/forge/issues/3594
+  fpm: ["--rpm-rpmbuild-define=_build_id_links none"]
+publish:
+  provider: github
+  owner: CAgAG
+  repo: cherry_studio_lite
+electronDownload:
+  mirror: https://npmmirror.com/mirrors/electron/
+beforePack: scripts/before-pack.js
+afterPack: scripts/after-pack.js
+afterSign: scripts/notarize.js
+artifactBuildCompleted: scripts/artifact-build-completed.js
+releaseInfo:
+  releaseNotes: |
+    <!--LANG:en-->
+    Cherry Studio 1.10.0 - Assistant chat and OpenCode Go
+
+    ✨ New Features
+    - [Claude Code] Let Windows agents fall back to PowerShell when Git Bash is unavailable.
+    - [Models] Add Doubao Seed 2.1 Pro, Doubao Seed 2.1 Turbo, and Doubao Seed Evolving with adjustable thinking levels.
+    - [Models] Add LongCat 2.0 as the default LongCat model and support toggling thinking mode.
+
+    🐛 Bug Fixes
+    - [Copilot] Fix device-code authorization when custom headers are configured.
+    - [Agent] Make Ctrl/Cmd+F open in-chat search in Agent sessions.
+    - [Chat] Load more history automatically when the initial message list does not fill the viewport.
+    - [Web Search] Fix query rewriting so conversation context is handled correctly.
+    - [CherryIN] Update website and OAuth links to open.cherryin.net.
+    - [Providers] Fix NewAPI Gemini requests using the wrong endpoint.
+    - [AI Diagnosis] Improve diagnosis of rate limits, quota errors, regional restrictions, content filters, and feature-specific timeouts.
+
+    ⚡ Performance
+    - [Chat] Reduce memory usage during large code-block streaming while preserving the complete generated content.
+
+    <!--LANG:zh-CN-->
+    Cherry Studio 1.10.0 - 助手聊天与 OpenCode Go
+
+    ✨ 新功能
+    - [Claude Code] Windows 环境未安装 Git Bash 时，智能体可自动使用 PowerShell。
+    - [模型] 新增豆包 Seed 2.1 Pro、Seed 2.1 Turbo 和 Seed Evolving，并支持调节思考强度。
+    - [模型] 将 LongCat 2.0 设为默认 LongCat 模型，并支持开关思考模式。
+
+    🐛 问题修复
+    - [Copilot] 修复配置自定义请求头后设备授权可能失败的问题。
+    - [智能体] 修复智能体会话中 Ctrl/Cmd+F 无法打开聊天内容搜索的问题。
+    - [聊天] 修复首屏消息未填满窗口时无法继续加载历史消息的问题。
+    - [联网搜索] 修复查询改写未正确处理对话上下文的问题。
+    - [CherryIN] 将网站及 OAuth 链接更新至 open.cherryin.net。
+    - [提供商] 修复 NewAPI Gemini 请求使用错误接口版本的问题。
+    - [AI 诊断] 改进限流、额度不足、地区限制、内容过滤和功能超时等错误的诊断准确性。
+
+    ⚡ 性能优化
+    - [聊天] 降低大型代码块生成过程中的内存占用，并保留完整生成内容。
+    <!--LANG:END-->
