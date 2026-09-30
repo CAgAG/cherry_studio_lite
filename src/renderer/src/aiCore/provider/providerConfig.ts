@@ -401,7 +401,7 @@ function formatNewApiBaseURL(baseURL: string, endpointType?: string): string {
   }
 }
 
-const OPENCODE_GO_USER_AGENT = 'CherryStudio/1.10.1'
+const OPENCODE_GO_USER_AGENT = 'CherryStudio/1.10.2'
 
 export function isOpenCodeGoProvider(provider: Provider, baseURL?: string): boolean {
   if (provider.id === SystemProviderIds['opencode-go']) return true

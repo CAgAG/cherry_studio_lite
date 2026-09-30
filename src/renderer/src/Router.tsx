@@ -18,6 +18,7 @@ import NotesPage from './pages/notes/NotesPage'
 import { OnboardingPage } from './pages/onboarding'
 import PaintingsRoutePage from './pages/paintings/PaintingsRoutePage'
 import SettingsPage from './pages/settings/SettingsPage'
+import AssistantPresetsPage from './pages/store/assistants/presets/AssistantPresetsPage'
 import TranslatePage from './pages/translate/TranslatePage'
 
 const Router: FC = () => {
@@ -30,6 +31,7 @@ const Router: FC = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/paintings/*" element={<PaintingsRoutePage />} />
+          <Route path="/store" element={<AssistantPresetsPage />} />
           <Route path="/translate" element={<TranslatePage />} />
           <Route path="/files" element={<FilesPage />} />
           <Route path="/notes" element={<NotesPage />} />

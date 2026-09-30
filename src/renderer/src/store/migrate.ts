@@ -3441,7 +3441,27 @@ const migrateConfig = {
       return state
     }
   },
-  '210': (state: any) => state
+  '210': (state: any) => state,
+  '211': (state: any) => {
+    try {
+      const icons = state.settings?.sidebarIcons
+      if (icons) {
+        const hasStore = icons.visible?.includes('store') || icons.disabled?.includes('store')
+        if (!hasStore) {
+          const assistantsIndex = icons.visible.indexOf('assistants')
+          if (assistantsIndex >= 0) {
+            icons.visible.splice(assistantsIndex + 1, 0, 'store')
+          } else {
+            icons.visible.unshift('store')
+          }
+        }
+      }
+      return state
+    } catch (error) {
+      logger.error('migrate 211 error', error as Error)
+      return state
+    }
+  }
 }
 
 // 注意：添加新迁移时，记得同时更新 persistReducer

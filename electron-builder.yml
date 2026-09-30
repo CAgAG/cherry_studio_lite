@@ -147,14 +147,14 @@ artifactBuildCompleted: scripts/artifact-build-completed.js
 releaseInfo:
   releaseNotes: |
     <!--LANG:en-->
-    Cherry Studio 1.10.1 - Smaller installer
+    Cherry Studio 1.10.2 - Smaller installer
 
     💄 Improvements
     - [Skills] Skills are removed from settings. Assistant chat is unchanged.
     - [Install] The Windows installer no longer packs previous build output, so the download is much smaller.
 
     <!--LANG:zh-CN-->
-    Cherry Studio 1.10.1 - 更小的安装包
+    Cherry Studio 1.10.2 - 更小的安装包
 
     💄 改进
     - [技能] 设置中不再提供技能。助手聊天保持不变。

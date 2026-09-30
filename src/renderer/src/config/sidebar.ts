@@ -5,10 +5,11 @@ import type { SidebarIcon } from '@renderer/types'
  * 这些图标会在侧边栏中默认显示
  */
 /** 已从产品中移除的侧栏入口，迁移和渲染时都要滤掉。 */
-export const REMOVED_SIDEBAR_ICONS: SidebarIcon[] = ['agents', 'store', 'minapp', 'code_tools', 'openclaw']
+export const REMOVED_SIDEBAR_ICONS: SidebarIcon[] = ['agents', 'minapp', 'code_tools', 'openclaw']
 
 export const DEFAULT_SIDEBAR_ICONS: SidebarIcon[] = [
   'assistants',
+  'store',
   'paintings',
   'translate',
   'knowledge',

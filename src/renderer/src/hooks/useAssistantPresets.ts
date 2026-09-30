@@ -11,6 +11,8 @@ import type { AssistantPreset, AssistantSettings } from '@renderer/types'
 
 const logger = loggerService.withContext('useAssistantPresets')
 
+const EMPTY_PRESETS: AssistantPreset[] = []
+
 function ensurePresetsArray(storedPresets: unknown): AssistantPreset[] {
   if (Array.isArray(storedPresets)) {
     return storedPresets
@@ -19,7 +21,7 @@ function ensurePresetsArray(storedPresets: unknown): AssistantPreset[] {
     type: typeof storedPresets,
     value: storedPresets
   })
-  return []
+  return EMPTY_PRESETS
 }
 
 export function useAssistantPresets() {

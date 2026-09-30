@@ -121,7 +121,7 @@ function defaultHeaders(provider: Provider): Record<string, string> {
     ...defaultAppHeaders(),
     ...(apiKey ? { Authorization: `Bearer ${apiKey}`, 'X-Api-Key': apiKey } : {}),
     ...(provider.id === SystemProviderIds['opencode-go']
-      ? { 'User-Agent': 'CherryStudio/1.10.1', 'x-opencode-session': OPENCODE_GO_MODEL_LIST_SESSION }
+      ? { 'User-Agent': 'CherryStudio/1.10.2', 'x-opencode-session': OPENCODE_GO_MODEL_LIST_SESSION }
       : {}),
     ...provider.extra_headers
   }

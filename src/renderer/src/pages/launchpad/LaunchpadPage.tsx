@@ -1,5 +1,5 @@
 import { useSettings } from '@renderer/hooks/useSettings'
-import { FileSearch, Folder, Languages, NotepadText, Palette } from 'lucide-react'
+import { FileSearch, Folder, Languages, NotepadText, Palette, Sparkle } from 'lucide-react'
 import type { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
@@ -16,6 +16,12 @@ const LaunchpadPage: FC = () => {
       text: t('title.knowledge'),
       path: '/knowledge',
       bgColor: 'linear-gradient(135deg, #10B981, #34D399)'
+    },
+    {
+      icon: <Sparkle size={32} className="icon" />,
+      text: t('title.store'),
+      path: '/store',
+      bgColor: 'linear-gradient(135deg, #6366F1, #4F46E5)'
     },
     {
       icon: <Palette size={32} className="icon" />,
